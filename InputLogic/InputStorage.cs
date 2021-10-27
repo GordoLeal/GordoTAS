@@ -31,12 +31,8 @@ namespace GordoTAS
 
         public void RemoveInputFromFrame(Input.InputStruct input, int frame)
         {
-            if (ExistInputListFromFrame(frame))
-            {
-                var structList = GetStructListFromFrame(frame);
-                structList.Remove(input);
+            GetStructListFromFrame(frame)?.Remove(input);
 
-            }
         }
 
         public List<Input.InputStruct> GetStructListFromFrame(int frame)
@@ -51,7 +47,10 @@ namespace GordoTAS
             }
 
         }
-
+        public int Count()
+        {
+            return inputLists.Count;
+        }
         public bool ExistInputListFromFrame(int frame)
         {
             if (inputLists.Exists(X => X.Frame == frame))

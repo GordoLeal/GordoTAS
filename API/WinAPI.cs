@@ -69,18 +69,6 @@ namespace GordoTAS
         [DllImport("user32.dll")]
         public static extern bool SetForegroundWindow(IntPtr hWnd);
 
-       /*
-        public const int INPUTMOUSE = 0;
-        public const int INPUT_KEYBOARD = 1;
-
-        public const int KEYEVENTF_EXTENDEDKEY = 0x0001;
-        public const int KEYEVENTF_KEYUP = 0x0002;
-        public const int KEYEVENTF_UNICODE = 0X0004;
-        public const int KEYEVENTF_SCANCODE = 0x0008;
-        public const int WM_KEYDOWN = 0x0100;
-        public const int WM_KEYUP = 0x0101;
-
-        const int MAPVK_VK_TO_VSC = 0; //virtual key code -> Virtual Scan Code (https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-mapvirtualkeyexa)
-        */
+ 
     }
 }

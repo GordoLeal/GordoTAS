@@ -1,4 +1,5 @@
-﻿
+﻿using System;
+
 namespace GordoTAS
 {
     class InputProcessing
@@ -21,7 +22,26 @@ namespace GordoTAS
             {
                 foreach (Input.InputStruct i in InputStorage.ins.GetStructListFromFrame(GlobalVars.ins.currentFrame))
                 {
-                    InputSender.SendKeyboardInput(GlobalVars.ins.gameHandler, i.key, i.pressType);
+                    switch (i.inputType)
+                    {
+                        case Input.InputType.KEYBOARD:
+                            InputSender.SendKeyboardInput(GlobalVars.ins.gameHandler, i.key, i.pressType);
+                            break;
+                        case Input.InputType.MOUSE:
+                            switch (i.mouseEvent)
+                            {
+                                case Input.MouseEvent.MOVE:
+                                    InputSender.SendMoveMouse(i.mouseMovX,i.mouseMovY);
+                                    break;
+                                case Input.MouseEvent.RIGHTDOWN:
+                                case Input.MouseEvent.RIGHTUP:
+                                case Input.MouseEvent.LEFTDOWN:
+                                case Input.MouseEvent.LEFTUP:
+                                    InputSender.SendMouseClick(i.mouseEvent); 
+                                    break;
+                            }
+                            break;
+                    }
                 }
             }
         }

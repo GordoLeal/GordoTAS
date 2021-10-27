@@ -1,10 +1,12 @@
 ﻿
+using System;
+
 namespace GordoTAS
 {
     // TODO: add mouse inputs
     class Input
     {
-        
+
         public struct InputStruct
         {
             public InputType inputType;
@@ -13,15 +15,28 @@ namespace GordoTAS
             public PressType pressType;
             //Mouse
             public MouseEvent mouseEvent;
+            public int mouseMovX;
+            public int mouseMovY;
 
             public override string ToString()
             {
-                switch(inputType)
+                switch (inputType)
                 {
                     case InputType.KEYBOARD:
                         return $"InputType: KEYBOARD , Key: {key} , Press Type: {pressType}";
                     case InputType.MOUSE:
-                        return "";
+                        switch (mouseEvent)
+                        {
+                            case MouseEvent.MOVE:
+                                return $"InputType: MOUSE, MouseEvent: MOVE , R/L: {mouseMovX} , D/U: {mouseMovY}";
+                            case MouseEvent.LEFTDOWN:
+                            case MouseEvent.LEFTUP:
+                            case MouseEvent.RIGHTDOWN:
+                            case MouseEvent.RIGHTUP:
+                                return $"InputType: MOUSE, MouseEvent: {mouseEvent}";
+
+                        }
+                        break;
                 }
                 return null;
             }
@@ -33,7 +48,7 @@ namespace GordoTAS
             KEYBOARD = 1
         }
 
-        public enum Key 
+        public enum Key
         {
             KEY_A = 0x41,
             KEY_B = 0x42,
@@ -70,14 +85,14 @@ namespace GordoTAS
         public enum PressType
         {
             KEYDOWN = 0X0100,
-            KEYUP  = 0X0101
+            KEYUP = 0X0101
         }
 
         public enum MouseEvent
         {
-            MOVE = 0x0200,
-            LEFTDOWN=0x0002,
-            LEFTUP=0x0004,
+            MOVE = 0x0001,
+            LEFTDOWN = 0x0002,
+            LEFTUP = 0x0004,
             RIGHTDOWN = 0x0008,
             RIGHTUP = 0x0010
         }

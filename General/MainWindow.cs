@@ -17,6 +17,7 @@ namespace GordoTAS
     {
         public static MainWindow main;
         private Input.InputStruct selectedInputStruct;
+        private int currentSelectedFrame;
 
         Input.InputType inpTypeEnumSlc;
         //keyboard Selection
@@ -31,9 +32,7 @@ namespace GordoTAS
 
         private void MainWindow_Load(object sender, EventArgs e)
         {
-            FPSSync.ins.FrameTick += UpdateCurrentFrame;
             GlobalVars.ins.gameHandler = WindowLogic.GetWindowHandlerByName("Sponge");
-
 
             foreach (String i in Enum.GetNames(typeof(Input.Key)))
             {
@@ -56,13 +55,8 @@ namespace GordoTAS
             PressType_ComboBox.SelectedItem = PressType_ComboBox.Items[0];
             FrameSelection.Maximum = uint.MaxValue;
             FrameCheckBackgroundWorker.DoWork += FrameCheckBackgroundWorker_DoWork;
-            //InputBackgroundWorker.DoWork += InputBackgroundWorker_DoWork;
+            InputBackgroundWorker.DoWork += InputBackgroundWorker_DoWork;
             UpdateInputList();
-        }
-
-        public void UpdateCurrentFrame()
-        {
-
         }
 
         private void FrameCheckBackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
@@ -72,18 +66,28 @@ namespace GordoTAS
 
         private void StartLoop_Click(object sender, EventArgs e)
         {
-            FPSSync.ins.StartLoop();
             GlobalVars.ins.gameHandler = WindowLogic.GetWindowHandlerByName("Sponge");
+            Console.WriteLine("[Debug]Game Handler Ponter: " + GlobalVars.ins.gameHandler);
+            if (GlobalVars.ins.gameHandler == IntPtr.Zero)
+            {
+                Console.WriteLine("[ERROR] Game not found! is the game open? ");
+                return;
+            }
+            StartLoop.Enabled = false;
+            GlobalVars.ins.currentFrame = 0;
+            GlobalVars.ins.fpsLimit = (int)FPSAim.Value;
+            FPSSync.ins.StartLoop();
             WinAPI.SetForegroundWindow(GlobalVars.ins.gameHandler);
             FrameCheckBackgroundWorker.RunWorkerAsync();
-            //InputBackgroundWorker.RunWorkerAsync();
+            InputBackgroundWorker.RunWorkerAsync();
         }
 
         private void StopLoop_Click(object sender, EventArgs e)
         {
             FPSSync.ins.StopLoop();
             FrameCheckBackgroundWorker.CancelAsync();
-            //InputBackgroundWorker.CancelAsync();
+            InputBackgroundWorker.CancelAsync();
+            StartLoop.Enabled = true;
         }
 
         private void InputType_ComboBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -91,7 +95,8 @@ namespace GordoTAS
             switch (InputType_ComboBox.Text)
             {
                 case "KEYBOARD":
-                    PressType_ComboBox.Enabled = true;
+                    PressType_ComboBox.Visible = true;
+                    label_PressType.Visible = true;
 
                     Key_ComboBox.Items.Clear();
                     foreach (string i in Enum.GetNames(typeof(Input.Key)))
@@ -118,7 +123,8 @@ namespace GordoTAS
                     }
                     Key_ComboBox.SelectedItem = null;
                     Key_ComboBox.SelectedItem = Key_ComboBox.Items[0];
-                    PressType_ComboBox.Enabled = false;
+                    PressType_ComboBox.Visible = false;
+                    label_PressType.Visible = false;
 
                     break;
             }
@@ -161,18 +167,58 @@ namespace GordoTAS
                         }
                     }
 
-
                     InputStorage.ins.AddInputToFrame(new Input.InputStruct()
                     {
                         key = (int)keyEnumSLC,
                         inputType = Input.InputType.KEYBOARD,
                         pressType = inpPressEnumSlc
 
-                    }, GlobalVars.ins.currentFrame);
+                    }, currentSelectedFrame);
                     break;
 
                 case Input.InputType.MOUSE:
+                    switch (keySlct)
+                    {
+                        case "MOVE":
+                            InputStorage.ins.AddInputToFrame(new Input.InputStruct()
+                            {
+                                inputType = Input.InputType.MOUSE,
+                                mouseEvent = Input.MouseEvent.MOVE,
+                                mouseMovX = (int)number_PosX.Value,
+                                mouseMovY = (int)number_PosY.Value
+                                
+                            }, currentSelectedFrame) ;
+                            break;
 
+                        case "LEFTDOWN":
+                            InputStorage.ins.AddInputToFrame(new Input.InputStruct() 
+                            {
+                                inputType = Input.InputType.MOUSE,
+                                mouseEvent = Input.MouseEvent.LEFTDOWN
+                            },currentSelectedFrame);
+                            break;
+                        case "LEFTUP":
+                            InputStorage.ins.AddInputToFrame(new Input.InputStruct()
+                            {
+                                inputType = Input.InputType.MOUSE,
+                                mouseEvent = Input.MouseEvent.LEFTUP
+                            }, currentSelectedFrame);
+                            break;
+                        case "RIGHTDOWN":
+                            InputStorage.ins.AddInputToFrame(new Input.InputStruct()
+                            {
+                                inputType = Input.InputType.MOUSE,
+                                mouseEvent = Input.MouseEvent.RIGHTDOWN
+                            }, currentSelectedFrame);
+                            break;
+                        case "RIGHTUP":
+                            InputStorage.ins.AddInputToFrame(new Input.InputStruct()
+                            {
+                                inputType = Input.InputType.MOUSE,
+                                mouseEvent = Input.MouseEvent.RIGHTUP
+                            }, currentSelectedFrame);
+                            break;
+                    }
                     break;
             }
 
@@ -182,7 +228,7 @@ namespace GordoTAS
         public void UpdateInputList()
         {
             InputVisualList.Items.Clear();
-            var inputStruckList = InputStorage.ins.GetStructListFromFrame(GlobalVars.ins.currentFrame);
+            var inputStruckList = InputStorage.ins.GetStructListFromFrame(currentSelectedFrame);
             if (inputStruckList != null)
             {
                 foreach (Input.InputStruct i in inputStruckList)
@@ -191,6 +237,8 @@ namespace GordoTAS
                     InputVisualList.SelectedIndex = 0;
                 }
             }
+
+            TimeLineBar.Maximum = InputStorage.ins.Count();
         }
 
         private void FPSAim_ValueChanged(object sender, EventArgs e)
@@ -205,34 +253,64 @@ namespace GordoTAS
                 return;
             }
             selectedInputStruct = (Input.InputStruct)InputVisualList.SelectedItem;
+            RemoveButton.Enabled = true;
         }
 
         private void FrameSelection_ValueChanged(object sender, EventArgs e)
         {
-            GlobalVars.ins.currentFrame = (int)FrameSelection.Value;
+            currentSelectedFrame = (int)FrameSelection.Value;
             UpdateInputList();
         }
 
         private void RemoveButton_Click(object sender, EventArgs e)
         {
-            InputStorage.ins.RemoveInputFromFrame(selectedInputStruct, GlobalVars.ins.currentFrame);
+            InputStorage.ins.RemoveInputFromFrame(selectedInputStruct, currentSelectedFrame);
             UpdateInputList();
         }
 
         private void InputBackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-           
+           /* var texta = ("Current Frame: " + GlobalVars.ins.currentFrame);
+            currentFrame_Label.Text = texta;
+            Console.WriteLine(texta);*/
         }
 
-        private void PressType_ComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        private void button1_Click(object sender, EventArgs e) //DEV_TEST
+        {
+            Console.WriteLine("DEV_TEST_START!");
+            WinAPI.SetForegroundWindow(GlobalVars.ins.gameHandler);
+            Thread.Sleep(1000);
+            var teestebool =  InputSender.SendMoveMouse(-1000,-1000);
+            Console.WriteLine(teestebool);
+            Console.WriteLine("DEV_TEST_END!");
+        }
+  
+        private void currentFrame_Label_Click(object sender, EventArgs e)
         {
 
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void TimeLineBar_Scroll(object sender, EventArgs e)
         {
-            WinAPI.PostMessageA(GlobalVars.ins.gameHandler, 0x0100, WinAPI.VkKeyScanA('a'), 0);
-            //WinAPI.PostMessageA(GlobalVars.ins.gameHandler, 0x0101, 0x41, 0);
+        }
+
+        private void Key_ComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            switch (Key_ComboBox.Text)
+            {
+                case "MOVE":
+                    label_Pos_X.Visible = true;
+                    label_Pos_Y.Visible = true;
+                    number_PosX.Visible = true;
+                    number_PosY.Visible = true;
+                    break;
+                default:
+                    label_Pos_X.Visible = false;
+                    label_Pos_Y.Visible = false;
+                    number_PosX.Visible = false;
+                    number_PosY.Visible = false;
+                    return;
+            }
         }
     }
 }

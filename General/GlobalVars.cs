@@ -24,7 +24,7 @@ namespace GordoTAS
         }
 
         public int currentFrame = 0;
-        public int fpsLimit = 0;
+        public int fpsLimit = 1;
         public IntPtr gameHandler;
     }
 }

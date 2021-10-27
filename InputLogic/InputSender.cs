@@ -19,12 +19,13 @@ namespace GordoTAS
 
             WinAPI.Input[] sInputs;
             sInputs = new WinAPI.Input[1];
-
+            sInputs[0].type = (int)Input.InputType.MOUSE;
             sInputs[0].mi.dx = dx;
             sInputs[0].mi.dy = dy;
             sInputs[0].mi.mouseData = 0;
-            sInputs[0].mi.dwExtraInfo = WinAPI.GetMessageExtraInfo();
             sInputs[0].mi.dwFlags = (uint)Input.MouseEvent.MOVE;
+            sInputs[0].mi.time = 0;
+            sInputs[0].mi.dwExtraInfo = WinAPI.GetMessageExtraInfo();
 
             int cuj = WinAPI.SendInput((short)sInputs.Length, sInputs, Marshal.SizeOf(new WinAPI.Input()));
             if (cuj > 0) return true;
