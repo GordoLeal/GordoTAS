@@ -62,5 +62,16 @@ namespace GordoTAS
                 return false;
             }
         }
+
+        public List<InputList> GetInputList()
+        {
+            return inputLists;
+        }
+
+        public void ClearInputs()
+        {
+            inputLists.Clear();
+            inputLists = new List<InputList>();
+        }
     }
 }

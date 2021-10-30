@@ -9,7 +9,6 @@ namespace GordoTAS
         {
             IntPtr hWnd = IntPtr.Zero;
             Process[] list = Process.GetProcesses();
-            Console.WriteLine("teste: " + list.Length);
             foreach (Process p in list)
             {
                 if (p.MainWindowTitle.Contains( winName))

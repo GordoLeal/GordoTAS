@@ -11,8 +11,8 @@ namespace GordoTAS
         {
             public InputType inputType;
             //Keyboard
-            public int key;
             public PressType pressType;
+            public int key;
             //Mouse
             public MouseEvent mouseEvent;
             public int mouseMovX;
@@ -41,13 +41,18 @@ namespace GordoTAS
                 return null;
             }
         }
-
+        /// <summary>
+        /// Keyboard or mouse Input
+        /// </summary>
         public enum InputType
         {
             MOUSE = 0,
             KEYBOARD = 1
         }
 
+        /// <summary>
+        /// KeyName = VirtualKeyValue
+        /// </summary>
         public enum Key
         {
             KEY_A = 0x41,
@@ -81,13 +86,19 @@ namespace GordoTAS
             KEY_ESCAPE = 0x1B
 
         }
-
+        
+        /// <summary>
+        /// Keyboard Down/Up events
+        /// </summary>
         public enum PressType
         {
             KEYDOWN = 0X0100,
             KEYUP = 0X0101
         }
 
+        /// <summary>
+        /// Mouse down/up events or Move
+        /// </summary>
         public enum MouseEvent
         {
             MOVE = 0x0001,

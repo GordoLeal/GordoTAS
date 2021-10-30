@@ -1,15 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Threading;
 using System.Windows.Forms;
-using System.Runtime.InteropServices;
-using System.Diagnostics;
 
 namespace GordoTAS
 {
@@ -18,7 +10,6 @@ namespace GordoTAS
         public static MainWindow main;
         private Input.InputStruct selectedInputStruct;
         private int currentSelectedFrame;
-
         Input.InputType inpTypeEnumSlc;
         //keyboard Selection
         Input.Key keyEnumSLC;
@@ -32,7 +23,14 @@ namespace GordoTAS
 
         private void MainWindow_Load(object sender, EventArgs e)
         {
+            main.Text = "Gordo Tool ( " + GlobalVars.Version + " )";
             GlobalVars.ins.gameHandler = WindowLogic.GetWindowHandlerByName("Sponge");
+            Console.WriteLine("[INFO] This is the program output, you will need for looking into your frames and other stuff");
+            MessageBox.Show("GordoTAS is in Beta phase, not everthing works correctly. \n\n" +
+                "- BFBB:Rehydrated works with UE4, a real-time physics engine, the physics WILL be different from one try/run to another.\n" +
+                "- In this version the tool is NOT in sync with load times, if you enter a loading screen the tool loop will not pause.\n" +
+                "- Keyboard inputs are send directly to the game, BUT Mouse inputs are send by your cursor, make sure the game is in focus (the program itself will set the game in focus on play)\n\n" +
+                "This tool is basically a macro", "Warning");
 
             foreach (String i in Enum.GetNames(typeof(Input.Key)))
             {
@@ -186,16 +184,16 @@ namespace GordoTAS
                                 mouseEvent = Input.MouseEvent.MOVE,
                                 mouseMovX = (int)number_PosX.Value,
                                 mouseMovY = (int)number_PosY.Value
-                                
-                            }, currentSelectedFrame) ;
+
+                            }, currentSelectedFrame);
                             break;
 
                         case "LEFTDOWN":
-                            InputStorage.ins.AddInputToFrame(new Input.InputStruct() 
+                            InputStorage.ins.AddInputToFrame(new Input.InputStruct()
                             {
                                 inputType = Input.InputType.MOUSE,
                                 mouseEvent = Input.MouseEvent.LEFTDOWN
-                            },currentSelectedFrame);
+                            }, currentSelectedFrame);
                             break;
                         case "LEFTUP":
                             InputStorage.ins.AddInputToFrame(new Input.InputStruct()
@@ -237,8 +235,6 @@ namespace GordoTAS
                     InputVisualList.SelectedIndex = 0;
                 }
             }
-
-            TimeLineBar.Maximum = InputStorage.ins.Count();
         }
 
         private void FPSAim_ValueChanged(object sender, EventArgs e)
@@ -248,7 +244,7 @@ namespace GordoTAS
 
         private void InputVisualList_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if(InputVisualList.SelectedIndex < 0)
+            if (InputVisualList.SelectedIndex < 0)
             {
                 return;
             }
@@ -270,28 +266,19 @@ namespace GordoTAS
 
         private void InputBackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-           /* var texta = ("Current Frame: " + GlobalVars.ins.currentFrame);
-            currentFrame_Label.Text = texta;
-            Console.WriteLine(texta);*/
         }
 
         private void button1_Click(object sender, EventArgs e) //DEV_TEST
         {
-            Console.WriteLine("DEV_TEST_START!");
-            WinAPI.SetForegroundWindow(GlobalVars.ins.gameHandler);
-            Thread.Sleep(1000);
-            var teestebool =  InputSender.SendMoveMouse(-1000,-1000);
-            Console.WriteLine(teestebool);
-            Console.WriteLine("DEV_TEST_END!");
-        }
-  
-        private void currentFrame_Label_Click(object sender, EventArgs e)
-        {
+            Console.WriteLine("[DEV] DEV_TEST_START!");
 
-        }
-
-        private void TimeLineBar_Scroll(object sender, EventArgs e)
-        {
+            FileControl file = new FileControl();
+            foreach (InputList i in InputStorage.ins.GetInputList())
+            {
+                file.AddInputToList(i);
+            }
+            file.SaveInputDataTo("DevTest");
+            Console.WriteLine("[DEV] DEV_TEST_END!");
         }
 
         private void Key_ComboBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -311,6 +298,45 @@ namespace GordoTAS
                     number_PosY.Visible = false;
                     return;
             }
+        }
+
+        private void button_AddFrame_Click(object sender, EventArgs e)
+        {
+            FrameSelection.Value += number_FrameAdd.Value;
+        }
+
+        private void button_SubFrame_Click(object sender, EventArgs e)
+        {
+            if ((FrameSelection.Value - number_FrameAdd.Value) < 0)
+            {
+                FrameSelection.Value = 0;
+            }
+            else
+            {
+                FrameSelection.Value -= number_FrameAdd.Value;
+            }
+        }
+
+        private void button_SaveData_Click(object sender, EventArgs e)
+        {
+            FileControl file = new FileControl();
+            foreach (InputList i in InputStorage.ins.GetInputList())
+            {
+                file.AddInputToList(i);
+            }
+            file.SaveInputDataTo("Inputs"+number_SaveSlot.Value+".GordoTAS");
+        }
+
+        private void button_LoadData_Click(object sender, EventArgs e)
+        {
+            FileControl file = new FileControl();
+            InputStorage.ins.ClearInputs();
+            var result = file.LoadInputDataFrom("Inputs" + number_SaveSlot.Value + ".GordoTAS");
+            if (!result)
+            {
+                Console.WriteLine("[ERROR] could not read file");
+            }
+            UpdateInputList();
         }
     }
 }

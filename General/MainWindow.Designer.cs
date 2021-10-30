@@ -46,22 +46,29 @@ namespace GordoTAS
             this.InputVisualList = new System.Windows.Forms.ListBox();
             this.InputListLabel = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.number_PosY = new System.Windows.Forms.NumericUpDown();
+            this.label_Pos_Y = new System.Windows.Forms.Label();
+            this.number_PosX = new System.Windows.Forms.NumericUpDown();
+            this.label_Pos_X = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.FPSAim = new System.Windows.Forms.NumericUpDown();
             this.InputBackgroundWorker = new System.ComponentModel.BackgroundWorker();
             this.DEV_TEST = new System.Windows.Forms.Button();
-            this.TimeLineBar = new System.Windows.Forms.TrackBar();
-            this.currentFrame_Label = new System.Windows.Forms.Label();
-            this.label_Pos_X = new System.Windows.Forms.Label();
-            this.number_PosX = new System.Windows.Forms.NumericUpDown();
-            this.label_Pos_Y = new System.Windows.Forms.Label();
-            this.number_PosY = new System.Windows.Forms.NumericUpDown();
+            this.button_AddFrame = new System.Windows.Forms.Button();
+            this.number_FrameAdd = new System.Windows.Forms.NumericUpDown();
+            this.button_SubFrame = new System.Windows.Forms.Button();
+            this.button_SaveData = new System.Windows.Forms.Button();
+            this.button_LoadData = new System.Windows.Forms.Button();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.number_SaveSlot = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.FrameSelection)).BeginInit();
             this.groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.FPSAim)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.TimeLineBar)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.number_PosX)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.number_PosY)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.number_PosX)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.FPSAim)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.number_FrameAdd)).BeginInit();
+            this.groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.number_SaveSlot)).BeginInit();
             this.SuspendLayout();
             // 
             // FrameCheckBackgroundWorker
@@ -71,21 +78,21 @@ namespace GordoTAS
             // 
             // StartLoop
             // 
-            this.StartLoop.Location = new System.Drawing.Point(275, 268);
+            this.StartLoop.Location = new System.Drawing.Point(268, 315);
             this.StartLoop.Name = "StartLoop";
             this.StartLoop.Size = new System.Drawing.Size(75, 23);
             this.StartLoop.TabIndex = 3;
-            this.StartLoop.Text = "StartLoop";
+            this.StartLoop.Text = "Play";
             this.StartLoop.UseVisualStyleBackColor = true;
             this.StartLoop.Click += new System.EventHandler(this.StartLoop_Click);
             // 
             // StopLoop
             // 
-            this.StopLoop.Location = new System.Drawing.Point(356, 268);
+            this.StopLoop.Location = new System.Drawing.Point(349, 315);
             this.StopLoop.Name = "StopLoop";
             this.StopLoop.Size = new System.Drawing.Size(75, 23);
             this.StopLoop.TabIndex = 4;
-            this.StopLoop.Text = "StopLoop";
+            this.StopLoop.Text = "Stop";
             this.StopLoop.UseVisualStyleBackColor = true;
             this.StopLoop.Click += new System.EventHandler(this.StopLoop_Click);
             // 
@@ -183,7 +190,7 @@ namespace GordoTAS
             this.RemoveButton.Name = "RemoveButton";
             this.RemoveButton.Size = new System.Drawing.Size(75, 23);
             this.RemoveButton.TabIndex = 15;
-            this.RemoveButton.Text = "Remove";
+            this.RemoveButton.Text = "Delete input";
             this.RemoveButton.UseVisualStyleBackColor = true;
             this.RemoveButton.Click += new System.EventHandler(this.RemoveButton_Click);
             // 
@@ -225,18 +232,82 @@ namespace GordoTAS
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Input options";
             // 
+            // number_PosY
+            // 
+            this.number_PosY.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.number_PosY.Location = new System.Drawing.Point(176, 138);
+            this.number_PosY.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
+            this.number_PosY.Minimum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            -2147483648});
+            this.number_PosY.Name = "number_PosY";
+            this.number_PosY.Size = new System.Drawing.Size(120, 20);
+            this.number_PosY.TabIndex = 17;
+            // 
+            // label_Pos_Y
+            // 
+            this.label_Pos_Y.AutoSize = true;
+            this.label_Pos_Y.Location = new System.Drawing.Point(176, 122);
+            this.label_Pos_Y.Name = "label_Pos_Y";
+            this.label_Pos_Y.Size = new System.Drawing.Size(75, 13);
+            this.label_Pos_Y.TabIndex = 16;
+            this.label_Pos_Y.Text = "- Down / + Up";
+            // 
+            // number_PosX
+            // 
+            this.number_PosX.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.number_PosX.Location = new System.Drawing.Point(176, 89);
+            this.number_PosX.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
+            this.number_PosX.Minimum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            -2147483648});
+            this.number_PosX.Name = "number_PosX";
+            this.number_PosX.Size = new System.Drawing.Size(120, 20);
+            this.number_PosX.TabIndex = 15;
+            this.number_PosX.Visible = false;
+            // 
+            // label_Pos_X
+            // 
+            this.label_Pos_X.AutoSize = true;
+            this.label_Pos_X.Location = new System.Drawing.Point(173, 72);
+            this.label_Pos_X.Name = "label_Pos_X";
+            this.label_Pos_X.Size = new System.Drawing.Size(76, 13);
+            this.label_Pos_X.TabIndex = 14;
+            this.label_Pos_X.Text = "- Left / + Right";
+            this.label_Pos_X.Visible = false;
+            // 
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(648, 204);
+            this.label6.Location = new System.Drawing.Point(666, 204);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(53, 13);
+            this.label6.Size = new System.Drawing.Size(30, 13);
             this.label6.TabIndex = 20;
-            this.label6.Text = "Aim FPS: ";
+            this.label6.Text = "FPS:";
             // 
             // FPSAim
             // 
-            this.FPSAim.Location = new System.Drawing.Point(707, 202);
+            this.FPSAim.Location = new System.Drawing.Point(702, 202);
             this.FPSAim.Maximum = new decimal(new int[] {
             144,
             0,
@@ -266,108 +337,106 @@ namespace GordoTAS
             // 
             // DEV_TEST
             // 
-            this.DEV_TEST.Location = new System.Drawing.Point(437, 268);
+            this.DEV_TEST.Location = new System.Drawing.Point(430, 315);
             this.DEV_TEST.Name = "DEV_TEST";
             this.DEV_TEST.Size = new System.Drawing.Size(75, 23);
             this.DEV_TEST.TabIndex = 24;
             this.DEV_TEST.Text = "DEV_TEST";
             this.DEV_TEST.UseVisualStyleBackColor = true;
+            this.DEV_TEST.Visible = false;
             this.DEV_TEST.Click += new System.EventHandler(this.button1_Click);
             // 
-            // TimeLineBar
+            // button_AddFrame
             // 
-            this.TimeLineBar.BackColor = System.Drawing.SystemColors.Control;
-            this.TimeLineBar.LargeChange = 1;
-            this.TimeLineBar.Location = new System.Drawing.Point(18, 297);
-            this.TimeLineBar.Maximum = 0;
-            this.TimeLineBar.Name = "TimeLineBar";
-            this.TimeLineBar.Size = new System.Drawing.Size(760, 45);
-            this.TimeLineBar.TabIndex = 25;
-            this.TimeLineBar.TickStyle = System.Windows.Forms.TickStyle.Both;
-            this.TimeLineBar.Scroll += new System.EventHandler(this.TimeLineBar_Scroll);
+            this.button_AddFrame.Location = new System.Drawing.Point(596, 228);
+            this.button_AddFrame.Name = "button_AddFrame";
+            this.button_AddFrame.Size = new System.Drawing.Size(35, 23);
+            this.button_AddFrame.TabIndex = 25;
+            this.button_AddFrame.Text = "+";
+            this.button_AddFrame.UseVisualStyleBackColor = true;
+            this.button_AddFrame.Click += new System.EventHandler(this.button_AddFrame_Click);
             // 
-            // currentFrame_Label
+            // number_FrameAdd
             // 
-            this.currentFrame_Label.AutoSize = true;
-            this.currentFrame_Label.Location = new System.Drawing.Point(18, 262);
-            this.currentFrame_Label.Name = "currentFrame_Label";
-            this.currentFrame_Label.Size = new System.Drawing.Size(35, 13);
-            this.currentFrame_Label.TabIndex = 26;
-            this.currentFrame_Label.Text = "label5";
-            this.currentFrame_Label.Click += new System.EventHandler(this.currentFrame_Label_Click);
-            // 
-            // label_Pos_X
-            // 
-            this.label_Pos_X.AutoSize = true;
-            this.label_Pos_X.Location = new System.Drawing.Point(173, 72);
-            this.label_Pos_X.Name = "label_Pos_X";
-            this.label_Pos_X.Size = new System.Drawing.Size(76, 13);
-            this.label_Pos_X.TabIndex = 14;
-            this.label_Pos_X.Text = "- Left / + Right";
-            this.label_Pos_X.Visible = false;
-            // 
-            // number_PosX
-            // 
-            this.number_PosX.Increment = new decimal(new int[] {
-            10,
+            this.number_FrameAdd.Location = new System.Drawing.Point(548, 230);
+            this.number_FrameAdd.Maximum = new decimal(new int[] {
+            1000,
             0,
             0,
             0});
-            this.number_PosX.Location = new System.Drawing.Point(176, 89);
-            this.number_PosX.Maximum = new decimal(new int[] {
-            10000,
+            this.number_FrameAdd.Minimum = new decimal(new int[] {
+            1,
             0,
             0,
             0});
-            this.number_PosX.Minimum = new decimal(new int[] {
-            10000,
-            0,
-            0,
-            -2147483648});
-            this.number_PosX.Name = "number_PosX";
-            this.number_PosX.Size = new System.Drawing.Size(120, 20);
-            this.number_PosX.TabIndex = 15;
-            this.number_PosX.Visible = false;
-            // 
-            // label_Pos_Y
-            // 
-            this.label_Pos_Y.AutoSize = true;
-            this.label_Pos_Y.Location = new System.Drawing.Point(176, 122);
-            this.label_Pos_Y.Name = "label_Pos_Y";
-            this.label_Pos_Y.Size = new System.Drawing.Size(75, 13);
-            this.label_Pos_Y.TabIndex = 16;
-            this.label_Pos_Y.Text = "- Down / + Up";
-            // 
-            // number_PosY
-            // 
-            this.number_PosY.Increment = new decimal(new int[] {
-            10,
+            this.number_FrameAdd.Name = "number_FrameAdd";
+            this.number_FrameAdd.Size = new System.Drawing.Size(45, 20);
+            this.number_FrameAdd.TabIndex = 27;
+            this.number_FrameAdd.Value = new decimal(new int[] {
+            1,
             0,
             0,
             0});
-            this.number_PosY.Location = new System.Drawing.Point(176, 138);
-            this.number_PosY.Maximum = new decimal(new int[] {
-            10000,
-            0,
-            0,
-            0});
-            this.number_PosY.Minimum = new decimal(new int[] {
-            10000,
-            0,
-            0,
-            -2147483648});
-            this.number_PosY.Name = "number_PosY";
-            this.number_PosY.Size = new System.Drawing.Size(120, 20);
-            this.number_PosY.TabIndex = 17;
+            // 
+            // button_SubFrame
+            // 
+            this.button_SubFrame.Location = new System.Drawing.Point(511, 228);
+            this.button_SubFrame.Name = "button_SubFrame";
+            this.button_SubFrame.Size = new System.Drawing.Size(35, 23);
+            this.button_SubFrame.TabIndex = 28;
+            this.button_SubFrame.Text = "-";
+            this.button_SubFrame.UseVisualStyleBackColor = true;
+            this.button_SubFrame.Click += new System.EventHandler(this.button_SubFrame_Click);
+            // 
+            // button_SaveData
+            // 
+            this.button_SaveData.Location = new System.Drawing.Point(6, 19);
+            this.button_SaveData.Name = "button_SaveData";
+            this.button_SaveData.Size = new System.Drawing.Size(75, 23);
+            this.button_SaveData.TabIndex = 29;
+            this.button_SaveData.Text = "Save";
+            this.button_SaveData.UseVisualStyleBackColor = true;
+            this.button_SaveData.Click += new System.EventHandler(this.button_SaveData_Click);
+            // 
+            // button_LoadData
+            // 
+            this.button_LoadData.Location = new System.Drawing.Point(87, 19);
+            this.button_LoadData.Name = "button_LoadData";
+            this.button_LoadData.Size = new System.Drawing.Size(75, 23);
+            this.button_LoadData.TabIndex = 30;
+            this.button_LoadData.Text = "Load";
+            this.button_LoadData.UseVisualStyleBackColor = true;
+            this.button_LoadData.Click += new System.EventHandler(this.button_LoadData_Click);
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.number_SaveSlot);
+            this.groupBox2.Controls.Add(this.button_LoadData);
+            this.groupBox2.Controls.Add(this.button_SaveData);
+            this.groupBox2.Location = new System.Drawing.Point(18, 246);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(233, 51);
+            this.groupBox2.TabIndex = 31;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Save/Load";
+            // 
+            // number_SaveSlot
+            // 
+            this.number_SaveSlot.Location = new System.Drawing.Point(168, 22);
+            this.number_SaveSlot.Name = "number_SaveSlot";
+            this.number_SaveSlot.Size = new System.Drawing.Size(48, 20);
+            this.number_SaveSlot.TabIndex = 0;
             // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(792, 376);
+            this.ClientSize = new System.Drawing.Size(792, 350);
+            this.Controls.Add(this.groupBox2);
+            this.Controls.Add(this.button_SubFrame);
+            this.Controls.Add(this.number_FrameAdd);
+            this.Controls.Add(this.button_AddFrame);
             this.Controls.Add(this.RemoveButton);
-            this.Controls.Add(this.currentFrame_Label);
-            this.Controls.Add(this.TimeLineBar);
             this.Controls.Add(this.DEV_TEST);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.InputListLabel);
@@ -381,15 +450,17 @@ namespace GordoTAS
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MainWindow";
-            this.Text = "Gordo TAS (DEV)";
+            this.Text = "Gordo TAS (BETA 0.1)";
             this.Load += new System.EventHandler(this.MainWindow_Load);
             ((System.ComponentModel.ISupportInitialize)(this.FrameSelection)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.FPSAim)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.TimeLineBar)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.number_PosX)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.number_PosY)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.number_PosX)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.FPSAim)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.number_FrameAdd)).EndInit();
+            this.groupBox2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.number_SaveSlot)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -415,12 +486,17 @@ namespace GordoTAS
         private System.Windows.Forms.Label label6;
         private System.ComponentModel.BackgroundWorker InputBackgroundWorker;
         private System.Windows.Forms.Button DEV_TEST;
-        private System.Windows.Forms.TrackBar TimeLineBar;
-        private System.Windows.Forms.Label currentFrame_Label;
         private System.Windows.Forms.Label label_Pos_X;
         private System.Windows.Forms.Label label_Pos_Y;
         private System.Windows.Forms.NumericUpDown number_PosX;
         private System.Windows.Forms.NumericUpDown FPSAim;
         private System.Windows.Forms.NumericUpDown number_PosY;
+        private System.Windows.Forms.Button button_AddFrame;
+        private System.Windows.Forms.NumericUpDown number_FrameAdd;
+        private System.Windows.Forms.Button button_SubFrame;
+        private System.Windows.Forms.Button button_SaveData;
+        private System.Windows.Forms.Button button_LoadData;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.NumericUpDown number_SaveSlot;
     }
 }

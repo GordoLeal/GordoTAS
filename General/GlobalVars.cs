@@ -26,5 +26,6 @@ namespace GordoTAS
         public int currentFrame = 0;
         public int fpsLimit = 1;
         public IntPtr gameHandler;
+        public static string Version = "BETA 0.1";
     }
 }
