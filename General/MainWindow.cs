@@ -23,7 +23,7 @@ namespace GordoTAS
 
         private void MainWindow_Load(object sender, EventArgs e)
         {
-            main.Text = "Gordo Tool ( " + GlobalVars.Version + " )";
+            main.Text = "GordoTAS Tool ( " + GlobalVars.Version + " )";
             GlobalVars.ins.gameHandler = WindowLogic.GetWindowHandlerByName("Sponge");
             Console.WriteLine("[INFO] This is the program output, you will need for looking into your frames and other stuff");
             MessageBox.Show("GordoTAS is in Beta phase, not everthing works correctly. \n\n" +
